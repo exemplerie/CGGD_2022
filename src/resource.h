@@ -61,7 +61,7 @@ namespace cg
 	template<typename T>
 	inline T& resource<T>::item(size_t x, size_t y)
 	{
-		return data.at(y*stride + x);
+		return data.at(y * stride + x);
 	}
 	template<typename T>
 	inline size_t resource<T>::get_size_in_bytes() const
@@ -80,13 +80,12 @@ namespace cg
 		return stride;
 	}
 
-	// TODO: Lab 1.02. Implement `cg::color` and `cg::unsigned_color` structs
 	struct color
 	{
 		static color from_float3(const float3& in)
 		{
-				color color{in.x, in.y, in.z};
-				return color;
+			color color{in.x, in.y, in.z};
+			return color;
 		};
 		float3 to_float3() const
 		{
@@ -101,29 +100,31 @@ namespace cg
 	{
 		static unsigned_color from_color(const color& color)
 		{
-						unsigned_color out{};
-						out.r = std::clamp(static_cast<int>(255.f * color.r),
-										   0, 255);
-						out.g = std::clamp(static_cast<int>(255.f * color.g),
-										   0, 255);
-						out.b = std::clamp(static_cast<int>(255.f * color.b),
-										   0, 255);
-
+			unsigned_color out{};
+			out.r = std::clamp(static_cast<int>(255.f * color.r),
+							   0, 255);
+			out.g = std::clamp(static_cast<int>(255.f * color.g),
+							   0, 255);
+			out.b = std::clamp(static_cast<int>(255.f * color.b),
+							   0, 255);
 		};
-		static unsigned_color from_float3(const float3& color){
-				unsigned_color out{};
-				float3 preprocessed = clamp(255.f*color, 0.f, 255.f);
-				out.r = static_cast<int>(preprocessed.x);
-				out.g = static_cast<int>(preprocessed.y);
-				out.b = static_cast<int>(preprocessed.z);
-				return out;
+		static unsigned_color from_float3(const float3& color)
+		{
+			unsigned_color out{};
+			float3 preprocessed = clamp(255.f * color, 0.f, 255.f);
+			out.r = static_cast<int>(preprocessed.x);
+			out.g = static_cast<int>(preprocessed.y);
+			out.b = static_cast<int>(preprocessed.z);
+			return out;
 		};
-		float3 to_float3() const {
-				return float3{
-						static_cast<float>(r),
-						static_cast<float>(g),
-						static_cast<float>(b),
-				} / 255.f;
+		float3 to_float3() const
+		{
+			return float3{
+						   static_cast<float>(r),
+						   static_cast<float>(g),
+						   static_cast<float>(b),
+				   } /
+				   255.f;
 		};
 		unsigned char r;
 		unsigned char g;
@@ -131,9 +132,25 @@ namespace cg
 	};
 
 
-	// TODO: Lab 1.03. Implement `cg::vertex` struct
 	struct vertex
 	{
+		float x;
+		float y;
+		float z;
+		float nx;
+		float ny;
+		float nz;
+		float u;
+		float v;
+		float ambient_r;
+		float ambient_g;
+		float ambient_b;
+		float diffuse_r;
+		float diffuse_g;
+		float diffuse_b;
+		float emissive_r;
+		float emissive_g;
+		float emissive_b;
 	};
 
 }// namespace cg
