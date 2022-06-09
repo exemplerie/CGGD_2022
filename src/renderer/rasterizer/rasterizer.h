@@ -119,8 +119,8 @@ namespace cg::renderer
 				auto processed_vertex = vertex_shader(coords, vertex);
 
 				vertex.x = processed_vertex.first.x / processed_vertex.first.w;
-				vertex.x = processed_vertex.first.y / processed_vertex.first.w;
-				vertex.x = processed_vertex.first.z / processed_vertex.first.w;
+				vertex.y = processed_vertex.first.y / processed_vertex.first.w;
+				vertex.z = processed_vertex.first.z / processed_vertex.first.w;
 
 				vertex.x = (vertex.x + 1.f) * width / 2.f;
 				vertex.y = (-vertex.x + 1.f) * height / 2.f;
