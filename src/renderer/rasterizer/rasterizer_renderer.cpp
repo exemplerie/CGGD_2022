@@ -42,7 +42,7 @@ void cg::renderer::rasterization_renderer::render()
 			camera->get_projection_matrix(),
 			camera->get_view_matrix(),
 			model->get_world_matrix());
-	rasterizer->vertex_shader = [&](float4 vertex, cg::vertex vertex_data){
+	rasterizer->vertex_shader = [&](float4 vertex, cg::vertex vertex_data) {
 		auto processed = mul(matrix, vertex);
 		return std::make_pair(processed, vertex_data);
 	};
@@ -51,8 +51,7 @@ void cg::renderer::rasterization_renderer::render()
 		return cg::color{
 				vertex_data.ambient_r,
 				vertex_data.ambient_g,
-				vertex_data.ambient_b
-		};
+				vertex_data.ambient_b};
 	};
 
 	for (size_t shape_id = 0; shape_id < model->get_index_buffers().size();

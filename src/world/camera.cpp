@@ -68,13 +68,12 @@ const float4x4 cg::world::camera::get_view_matrix() const
 	float3 x_axis = normalize(cross(up, z_axis));
 	float3 y_axis = cross(z_axis, x_axis);
 
-	return float4x4 {
+	return float4x4{
 			{x_axis.x, y_axis.x, z_axis.x, 0},
 			{x_axis.y, y_axis.y, z_axis.y, 0},
 			{x_axis.z, y_axis.z, z_axis.z, 0},
 			{-dot(z_axis, position), -dot(y_axis, position),
-			-dot(z_axis, position), 1}
-	};
+			 -dot(z_axis, position), 1}};
 }
 
 #ifdef DX12
@@ -114,8 +113,7 @@ const float3 cg::world::camera::get_direction() const
 	return float3{
 			std::sin(theta) * std::cos(phi),
 			std::sin(phi),
-			-std::cos(theta) * std::cos(phi)
-	};
+			-std::cos(theta) * std::cos(phi)};
 }
 
 const float3 cg::world::camera::get_right() const

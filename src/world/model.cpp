@@ -82,34 +82,31 @@ void cg::world::model::load_obj(const std::filesystem::path& model_path)
 		auto index_buffer = index_buffers[s];
 		std::map<std::tuple<int, int, int>, unsigned int> index_map;
 		const auto& mesh = shapes[s].mesh;
-		for (size_t f = 0; f< mesh.num_face_vertices.size(); f++)
+		for (size_t f = 0; f < mesh.num_face_vertices.size(); f++)
 		{
 			int fv = mesh.num_face_vertices[f];
 			float3 normal;
 			if (mesh.indices[index_offset].normal_index < 0)
 			{
 				auto a_id = mesh.indices[index_offset];
-				auto b_id = mesh.indices[index_offset+1];
-				auto c_id = mesh.indices[index_offset+2];
+				auto b_id = mesh.indices[index_offset + 1];
+				auto c_id = mesh.indices[index_offset + 2];
 
-				float3  a{
-						attrib.vertices[3*a_id.vertex_index],
-						attrib.vertices[3*a_id.vertex_index+1],
-						attrib.vertices[3*a_id.vertex_index+2]
-				};
+				float3 a{
+						attrib.vertices[3 * a_id.vertex_index],
+						attrib.vertices[3 * a_id.vertex_index + 1],
+						attrib.vertices[3 * a_id.vertex_index + 2]};
 
-				float3  b{
-						attrib.vertices[3*b_id.vertex_index],
-						attrib.vertices[3*b_id.vertex_index+1],
-						attrib.vertices[3*b_id.vertex_index+2]
-				};
+				float3 b{
+						attrib.vertices[3 * b_id.vertex_index],
+						attrib.vertices[3 * b_id.vertex_index + 1],
+						attrib.vertices[3 * b_id.vertex_index + 2]};
 
-				float3  c{
-						attrib.vertices[3*c_id.vertex_index],
-						attrib.vertices[3*c_id.vertex_index+1],
-						attrib.vertices[3*c_id.vertex_index+2]
-				};
-				normal = normalize(cross(b-a, c-a));
+				float3 c{
+						attrib.vertices[3 * c_id.vertex_index],
+						attrib.vertices[3 * c_id.vertex_index + 1],
+						attrib.vertices[3 * c_id.vertex_index + 2]};
+				normal = normalize(cross(b - a, c - a));
 			}
 
 			for (size_t v = 0; v < fv; v++)
@@ -118,8 +115,7 @@ void cg::world::model::load_obj(const std::filesystem::path& model_path)
 				auto idx_tuple = std::make_tuple(
 						idx.vertex_index,
 						idx.normal_index,
-						idx.texcoord_index
-						);
+						idx.texcoord_index);
 				if (index_map.count(idx_tuple) == 0)
 				{
 					cg::vertex& vertex = vertex_buffer->item(
