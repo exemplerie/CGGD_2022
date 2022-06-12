@@ -235,6 +235,7 @@ namespace cg::renderer
 			const triangle<VB>& triangle, const ray& ray) const
 	{
 		// TODO: Lab 2.02. Implement an intersection_shader method of raytracer class
+		payload payload
 	}
 
 	template<typename VB, typename RT>
