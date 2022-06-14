@@ -34,7 +34,9 @@ void cg::renderer::ray_tracing_renderer::init()
 	raytracer->set_vertex_buffers(model->get_vertex_buffers());
 	raytracer->set_index_buffers(model->get_index_buffers());
 
-	// TODO: Lab 2.03. Add light information to lights array of ray_tracing_renderer
+	lights.push_back({
+			float3{0.f, 1.58f, -0.03f},
+			float3{0.78f, 0.78f, 0.78f}});
 	// TODO: Lab 2.04. Initialize `shadow_raytracer` in `ray_tracing_renderer`
 }
 
@@ -44,13 +46,20 @@ void cg::renderer::ray_tracing_renderer::update() {}
 
 void cg::renderer::ray_tracing_renderer::render()
 {
-	// TODO: Lab 2.01. Implement miss_shader, image clearing, calling ray_generation, and saving in ray_tracing_renderer class
 	raytracer->clear_render_target({0, 0, 0});
 	raytracer->miss_shader = [](const ray& ray){
 		payload payload{};
 		payload.color = {0.f, 0.f, (ray.direction.y + 1.f) * 0.5f};
 		return payload;
 	};
+	raytracer->closest_hit_shader = [&](const ray& ray, payload& payload,
+										const triangle<cg::vertex>& triangle,
+										size_t depth) {
+		float3 result_color = triangle.diffuse;
+		payload.color = cg::color::from_float3(result_color);
+		return payload;
+	};
+	raytracer->build_acceleration_structure();
 
 	auto start = std::chrono::high_resolution_clock::now();
 	raytracer->ray_generation(
