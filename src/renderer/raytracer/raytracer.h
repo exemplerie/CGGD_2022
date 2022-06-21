@@ -198,7 +198,7 @@ namespace cg::renderer
 			float3 right, float3 up, size_t depth, size_t accumulation_num)
 	{
 		float frame_weight = 1.f / static_cast<float>(accumulation_num);
-		for (int frame_id = 0; frame_id < accumulation_num; frame_id)
+		for (int frame_id = 0; frame_id < accumulation_num; frame_id++)
 		{
 			std::cout << "Tracing frame #" << frame_id + 1 << "\n";
 			float2 jitter = get_jitter(frame_id);
@@ -220,7 +220,8 @@ namespace cg::renderer
 												  payload.color.r,
 												  payload.color.g,
 												  payload.color.b,
-										  }*frame_weight);
+										  } *
+										  frame_weight);
 
 					render_target->item(x, y) = RT::from_float3(history_pixel);
 				}
@@ -242,7 +243,7 @@ namespace cg::renderer
 
 		for (auto& aabb: acceleration_structures)
 		{
-			if(!aabb.aabb_test(ray))
+			if (!aabb.aabb_test(ray))
 				continue;
 			for (auto& triangle: aabb.get_triangles())
 			{
@@ -292,7 +293,7 @@ namespace cg::renderer
 			return payload;
 
 		payload.t = dot(triangle.ca, qvec) * inv_det;
-		payload.bary = float3{1.f -u-v, u, v};
+		payload.bary = float3{1.f - u - v, u, v};
 		return payload;
 	}
 
@@ -302,7 +303,7 @@ namespace cg::renderer
 		float2 result{0.f, 0.f};
 		constexpr int base_x = 2;
 		int index = frame_id + 1;
-		float inv_base = 1.f/base_x;
+		float inv_base = 1.f / base_x;
 		float fraction = inv_base;
 		while (index > 0)
 		{
@@ -313,7 +314,7 @@ namespace cg::renderer
 
 		constexpr int base_y = 3;
 		index = frame_id + 1;
-		inv_base = 1.f/base_y;
+		inv_base = 1.f / base_y;
 		fraction = inv_base;
 		while (index > 0)
 		{
@@ -329,7 +330,7 @@ namespace cg::renderer
 	inline void aabb<VB>::add_triangle(const triangle<VB> triangle)
 	{
 		if (triangles.empty())
-			aabb_max = aabb_min = triangle;
+			aabb_max = aabb_min = triangle.a;
 		triangles.push_back(triangle);
 		aabb_max = max(aabb_max, triangle.a);
 		aabb_max = max(aabb_max, triangle.b);
