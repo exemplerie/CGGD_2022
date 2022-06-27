@@ -123,7 +123,7 @@ namespace cg::renderer
 				vertex.z = processed_vertex.first.z / processed_vertex.first.w;
 
 				vertex.x = (vertex.x + 1.f) * width / 2.f;
-				vertex.y = (-vertex.x + 1.f) * height / 2.f;
+				vertex.y = (-vertex.y + 1.f) * height / 2.f;
 			}
 
 			float2 bounding_box_begin{
