@@ -50,11 +50,11 @@ ComPtr<IDXGIFactory4> cg::renderer::dx12_renderer::get_dxgi_factory()
 	UINT dxgi_factory_flags = 0;
 #ifdef _DEBUG
 	ComPtr<ID3D12Debug> debug_controller;
-	if(SUCCEEDED(D3D12GetDebugInterface(IID_PRV_ARGS(&debug_controller))))
+	if(SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debug_controller))))
 	{
 		debug_controller->EnableDebugLayer();
 		dxgi_factory_flags |= DXGI_CREATE_FACTORY_DEBUG;
-	};
+	}
 #endif
 
 	ComPtr<IDXGIFactory4> dxgi_factory;
@@ -66,7 +66,7 @@ void cg::renderer::dx12_renderer::initialize_device(ComPtr<IDXGIFactory4>& dxgi_
 {
 	ComPtr<IDXGIAdapter1> hardware_adapter;
 	dxgi_factory->EnumAdapters1(0, &hardware_adapter);
-#ifdef _DEBUD
+#ifdef _DEBUG
 	DXGI_ADAPTER_DESC adapter_desc = {};
 	hardware_adapter->GetDesc(&adapter_desc);
 	OutputDebugString(adapter_desc.Description);
@@ -74,7 +74,7 @@ void cg::renderer::dx12_renderer::initialize_device(ComPtr<IDXGIFactory4>& dxgi_
 #endif
 	THROW_IF_FAILED(D3D12CreateDevice(hardware_adapter.Get(),
 									  D3D_FEATURE_LEVEL_11_0,
-									  IID_PRV_ARGS(&device)));
+									  IID_PPV_ARGS(&device)));
 }
 
 void cg::renderer::dx12_renderer::create_direct_command_queue()
@@ -88,7 +88,33 @@ void cg::renderer::dx12_renderer::create_direct_command_queue()
 
 void cg::renderer::dx12_renderer::create_swap_chain(ComPtr<IDXGIFactory4>& dxgi_factory)
 {
-	// TODO Lab 3.02. Create a swap chain and bind it to window
+	DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
+	swap_chain_desc.BufferCount = frame_number;
+	swap_chain_desc.Height = settings->height;
+	swap_chain_desc.Width = settings->width;
+	swap_chain_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+	swap_chain_desc.SampleDesc.Count = 1;
+
+
+	ComPtr<IDXGISwapChain1> temp_swap_chain;
+	THROW_IF_FAILED(dxgi_factory->CreateSwapChainForHwnd(
+			command_queue.Get(),
+			cg::utils::window::get_hwnd(),
+			&swap_chain_desc,
+			nullptr,
+			nullptr,
+			&temp_swap_chain));
+
+	dxgi_factory->MakeWindowAssociation(
+			cg::utils::window::get_hwnd(),
+			DXGI_MWA_NO_ALT_ENTER
+	);
+
+	temp_swap_chain.As(&swap_chain);
+	frame_index = swap_chain->GetCurrentBackBufferIndex();
+}
 }
 
 void cg::renderer::dx12_renderer::create_render_target_views()
