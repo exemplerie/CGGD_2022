@@ -211,7 +211,7 @@ namespace cg::renderer
 					float v = (2.f * y + jitter.y) / static_cast<float>(height - 1) - 1.f;
 					u *= static_cast<float>(width) / static_cast<float>(height);
 					float3 ray_direction = direction + u * right - v * up;
-					ray ray(position, direction);
+					ray ray(position, ray_direction);
 
 					payload payload = trace_ray(ray, depth);
 
